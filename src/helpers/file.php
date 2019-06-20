@@ -112,6 +112,10 @@ if (!function_exists('append_storage_information')) {
             return $rows;
         }
 
+        if (empty($params['fields'])) {
+            $params['fields'] = '';
+        }
+
         $fields =  get_files_fields($params['fields']);
 
         $container = Application::getInstance()->getContainer();
@@ -344,10 +348,12 @@ if (!function_exists('get_files_fields')) {
     function get_files_fields($params)
     {
         $fileParams = [];
-        foreach ($params as $param) {
-            $paramAry = \explode('.', $param);
-            if ($paramAry[0] === 'data') {
-                $fileParams[] = $paramAry[1];
+        if (is_array($params) || is_object($params)) {
+            foreach ($params as $param) {
+                $paramAry = \explode('.', $param);
+                if ($paramAry[0] === 'data') {
+                    $fileParams[] = $paramAry[1];
+                }
             }
         }
         return $fileParams;
